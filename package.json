@@ -1,0 +1,20 @@
+{
+  "name": "hw_7_weatherapp_v3",
+  "version": "1.0.0",
+  "description": "weatherAppV3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Whitemple/weatherAppV3.git"
+  },
+  "keywords": [],
+  "author": "Iaroslav Khromei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Whitemple/weatherAppV3/issues"
+  },
+  "homepage": "https://github.com/Whitemple/weatherAppV3#readme"
+}
