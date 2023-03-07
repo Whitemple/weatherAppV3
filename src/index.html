@@ -42,11 +42,21 @@
       <main class="main">
         <div class="main__history">
           <h3 class="main__history-title">История поиска</h3>
+          <ol class="main__cities-list"></ol>
         </div>
-        <div class="main__card">
-          <!-- <div id="YMapsID" style="width: 450px; height: 350px;"></div> -->
-        </div>
+        <div class="main__card"></div>
       </main>
     </div>
+    <!-- <script src="https://api-maps.yandex.ru/3.0/?apikey=fdea7c49-7871-40ad-990d-1b2a3f15755d&lang=ru_RU"></script>
+    <script>
+      ymaps3.ready.then(() => {
+        const map = new ymaps3.YMap(document.getElementById('YMapsID'), {
+          location: {
+            center: [37.64, 55.76],
+            zoom: 10
+          }
+        });
+      });
+    </script> -->
   </body>
 </html>

@@ -4,14 +4,14 @@ const mainCard = document.querySelector(".main__card");
 const inputSearch = document.querySelector(".header__search");
 const btnSearch = document.querySelector(".header__btn");
 const btnGeolocation = document.querySelector(".header__geolocation");
-const citiesList = document.querySelector(".main__history-title");
-const citiesListTitle = document.createElement("h3");
-citiesListTitle.innerText = "История поиска";
-// const mapCont = document.querySelector('#map-container');
+const citiesList = document.querySelector(".main__cities-list");
 const apiKey = "1289f3b71732cf788b8ea917a6299964";
 // const apiKeyMap = 'fdea7c49-7871-40ad-990d-1b2a3f15755d';
+
 const contentCard = document.createElement("div");
 contentCard.classList.add("main__card-block");
+
+// Ниже переменная нужна для записи ранее посещенных города в массив и передачу в LocalStorage
 let dataBase = [];
 
 // Ниже пишем функцию по добавлению в Local Storage данных
@@ -37,7 +37,7 @@ async function setToLocalStorage(city) {
   localStorage.setItem("dataBase", str);
 }
 
-// Пишем функцию по выводу информации из LocalStorage на страницу браузера
+// Функция проверки ключа в LocalStorage и его преобразования в json в случае наличия
 
 const connectToLocalStorage = () => {
   const getFromDataBase = localStorage.getItem("dataBase");
@@ -45,20 +45,45 @@ const connectToLocalStorage = () => {
   return dataBaseJson;
 };
 
+// Функция перерисовки страницы и вывода списка ранее посещенных городов
+
 function createCitiesList(resultCOfConnection) {
   citiesList.innerHTML = "";
-  citiesList.append(citiesListTitle);
-  for (let i = 0; i < resultCOfConnection.length; i += 1) {
-    const savedCities = document.createElement("p");
-    savedCities.classList.add(".main__savedCities");
-    savedCities.innerText = resultCOfConnection[i];
-    citiesList.append(savedCities);
+  // citiesList.append(citiesListTitle);
+  if (resultCOfConnection) {
+    for (let i = 0; i < resultCOfConnection.length; i += 1) {
+      const savedCities = document.createElement("li");
+      savedCities.classList.add("main__savedCities");
+      savedCities.innerText = resultCOfConnection[i];
+      citiesList.append(savedCities);
+    }
   }
 }
+
+// Пишем функцию по выводу информации из LocalStorage на страницу браузера (состоит из двух предыдущих)
+// Т.к. эти функции не ассинхронные, то можем ииспользовать их в любом другом месте
 
 async function getFromLocalStorage() {
   connectToLocalStorage();
   createCitiesList(connectToLocalStorage());
+}
+
+// Функция-конструктуор карточки погоды
+
+function buildMarkUpCard(getData) {
+  const markup = `
+    <div class="main__card-info">
+      <h3 class="main__card-city">${getData.name}</h3>
+      <p class="main__card-temp">Температура: ${Math.round(
+        getData.main.temp
+      )}</p>
+      <img class="main__card-img" src="http://openweathermap.org/img/w/${
+        getData.weather[0].icon
+      }.png" alt="weather-icon" />
+    </div>
+    <div id="YMapsID" style="width: 450px; height: 350px;"></div>
+  `;
+  return markup;
 }
 
 // Пишем ассинхронную функцию для отправки и полчения данных по API
@@ -69,19 +94,7 @@ async function getCity(city) {
   );
   try {
     const data = await response.json();
-    // console.log(data);
-    contentCard.innerHTML = `
-            <div class="main__card-info">
-                <h3 class="main__card-city">${data.name}</h3>
-                <p class="main__card-temp">Температура: ${Math.round(
-                  data.main.temp
-                )}</p>
-                <img class="main__card-img" src="http://openweathermap.org/img/w/${
-                  data.weather[0].icon
-                }.png" alt="weather-icon" />
-            </div>
-            <div class="main__map">Map</div>
-        `;
+    contentCard.innerHTML = buildMarkUpCard(data);
     await setToLocalStorage(`${data.name}`);
     await getFromLocalStorage();
   } catch (error) {
@@ -111,53 +124,65 @@ btnGeolocation.addEventListener("click", (e) => {
   navigator.geolocation.getCurrentPosition((location) => {
     const lat = location.coords.latitude;
     const lon = location.coords.longitude;
-    fetch(
-      `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&lang=ru&apiKey=5ea9c7db826548f89523c51287d5685b`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        getCity(data.features[0].properties.city);
-      });
+    setTimeout(() => {
+      mainCard.innerHTML = "";
+      fetch(
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&lang=ru&apiKey=5ea9c7db826548f89523c51287d5685b`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          getCity(data.features[0].properties.city);
+        });
+    }, 2000);
+    mainCard.innerHTML = `Загрузка данных...`;
   });
 });
 
-// Ниже самовызывающаяся функция по выводу дефолтного города при старте экрана
+// Ниже самовызывающаяся функция по выводу дефолтного города при старте экрана. Значение берется из геопозиции
 
 (function () {
   navigator.geolocation.getCurrentPosition((location) => {
-    const lat = location.coords.latitude;
-    const lon = location.coords.longitude;
-    fetch(
-      `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&lang=ru&apiKey=5ea9c7db826548f89523c51287d5685b`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        fetch(
-          `https://api.openweathermap.org/data/2.5/weather?&q=${data.features[0].properties.city}&appid=${apiKey}&lang=ru&units=metric`
-        )
-          .then((response) => response.json())
-          .then((dataCity) => {
-            contentCard.innerHTML = `
-                    <div class="main__card-info">
-                        <h3 class="main__card-city">${dataCity.name}</h3>
-                        <p class="main__card-temp">Температура: ${Math.round(
-                          dataCity.main.temp
-                        )}</p>
-                        <img class="main__card-img" src="http://openweathermap.org/img/w/${
-                          dataCity.weather[0].icon
-                        }.png" alt="weather-icon" />
-                    </div>
-                    <div class="main__map">Map</div>
-                `;
-          });
-      })
-      .catch(() => {
-        contentCard.innerHTML = `
+    const { latitude } = location.coords;
+    const { longitude } = location.coords;
+    function showStartPage(lat, lon) {
+      fetch(
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&lang=ru&apiKey=5ea9c7db826548f89523c51287d5685b`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          fetch(
+            // Вот тут поработать чтобы если геопозиция не разрешена, то выводить город по дефолту Москва. Пока не работает
+            `https://api.openweathermap.org/data/2.5/weather?&q=${
+              data ? data.features[0].properties.city : "Москва"
+            }&appid=${apiKey}&lang=ru&units=metric`
+          )
+            .then((response) => response.json())
+            .then((dataCity) => {
+              contentCard.innerHTML = buildMarkUpCard(dataCity);
+            });
+        })
+        .catch(() => {
+          contentCard.innerHTML = `
             Ошибка соединения с сервером, попробуйте позже.
         `;
-      });
-    mainCard.append(contentCard);
+        });
+      return contentCard;
+    }
+    // через setTimeout имитируем загрузку данных на странице
+    setTimeout(() => {
+      mainCard.innerHTML = "";
+      mainCard.append(showStartPage(latitude, longitude));
+    }, 2000);
+    mainCard.innerHTML = `Загрузка данных...`;
   });
 })();
 
-// src=`https://api-maps.yandex.ru/3.0/?apikey=<${apiKeyMap}>&lang=ru_RU`
+// Ниже функция показа погоды при клике на город из списка ранее посещенных
+
+citiesList.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (e.target.className === "main__savedCities") {
+    const city = e.target.innerText;
+    getCity(city);
+  }
+});
