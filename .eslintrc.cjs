@@ -4,6 +4,9 @@ module.exports = {
     es2021: true,
     "jest/globals": true,
   },
+  globals: {
+    ymaps: true,
+  },
   extends: ["airbnb-base", "prettier"],
   overrides: [],
   parserOptions: {

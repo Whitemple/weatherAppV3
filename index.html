@@ -11,7 +11,30 @@
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"  ></script> -->
     <!--  local jquery --- установите jq в папку либс, для примера ниже -->
     <!-- <script src="js/jq.js"  ></script> -->
-    <script src="./src/js/index.js" charset="utf-8" defer></script>
+    <script
+      src="./src/js/index.js"
+      charset="utf-8"
+      type="module"
+      defer
+    ></script>
+    <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=fdea7c49-7871-40ad-990d-1b2a3f15755d&load=Map&lang=ru_RU"
+      type="text/javascript"
+    ></script>
+    <!-- <script type="text/javascript">
+      ymaps.ready(function () {  
+        var map = new ymaps.Map("map", {
+          center: [55.76, 37.64], 
+          zoom: 10
+        });
+    
+        if (map) {
+          ymaps.modules.require(['Placemark', 'Circle'], function (Placemark, Circle) {
+            var placemark = new Placemark([55.37, 35.45]);
+          });
+        }
+      });
+    </script> -->
     <!--Скрипт работает после загрузки дом, чтоб изменить, уберите defer -->
     <!-- Загрузка React. -->
     <!-- Внимание: во время развертывания, замените "development.js" на "production.min.js". -->
@@ -45,6 +68,7 @@
           <ol class="main__cities-list"></ol>
         </div>
         <div class="main__card"></div>
+        <div id="map"></div>
       </main>
     </div>
     <!-- <script src="https://api-maps.yandex.ru/3.0/?apikey=fdea7c49-7871-40ad-990d-1b2a3f15755d&lang=ru_RU"></script>

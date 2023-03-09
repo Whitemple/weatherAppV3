@@ -13,6 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/Whitemple/weatherAppV3.git"
   },
+  "type": "module",
   "keywords": [],
   "author": "Iaroslav Khromei",
   "license": "ISC",
