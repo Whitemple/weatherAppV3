@@ -11,7 +11,6 @@ export function buildMarkUpCard(getData) {
           getData.weather[0].icon
         }.png" alt="weather-icon" />
       </div>
-      
     `;
   return markup;
 }
