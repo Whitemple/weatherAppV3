@@ -35,15 +35,15 @@ export const connectToLocalStorage = () => {
 
 // Функция перерисовки страницы и вывода списка ранее посещенных городов
 
-export function createCitiesList(resultCOfConnection) {
+export function createCitiesList(resultOfConnection) {
   citiesList.innerHTML = "";
-  if (resultCOfConnection) {
-    for (let i = 0; i < resultCOfConnection.length; i += 1) {
+  if (resultOfConnection) {
+    resultOfConnection.forEach((elem) => {
       const savedCities = document.createElement("li");
       savedCities.classList.add("main__savedCities");
-      savedCities.innerText = resultCOfConnection[i];
+      savedCities.innerText = elem;
       citiesList.append(savedCities);
-    }
+    });
   }
 }
 
@@ -51,6 +51,6 @@ export function createCitiesList(resultCOfConnection) {
 // Т.к. эти функции не ассинхронные, то можем ииспользовать их в любом другом месте
 
 export async function getFromLocalStorage() {
-  connectToLocalStorage();
+  await connectToLocalStorage();
   createCitiesList(connectToLocalStorage());
 }

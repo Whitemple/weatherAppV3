@@ -1,7 +1,7 @@
 // Функция-конструктуор карточки погоды
 
 export function buildMarkUpCard(getData) {
-  const markup = `
+  return `
       <div class="main__card-info">
         <h3 class="main__card-city">${getData.name}</h3>
         <p class="main__card-temp">Температура: ${Math.round(
@@ -12,5 +12,4 @@ export function buildMarkUpCard(getData) {
         }.png" alt="weather-icon" />
       </div>
     `;
-  return markup;
 }
