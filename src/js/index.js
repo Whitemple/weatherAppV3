@@ -6,6 +6,7 @@ import {
 import { buildMarkUpCard } from "./buildMarkUpCard.js";
 import { getMap } from "./getMap.js";
 import { getCity, apiKey, contentCard, mainCard } from "./getCity.js";
+import { getCityByList } from "./getCityByList.js";
 
 // Объявлем переменные
 
@@ -95,6 +96,6 @@ citiesList.addEventListener("click", (e) => {
   e.preventDefault();
   if (e.target.className === "main__savedCities") {
     const city = e.target.innerText;
-    getCity(city);
+    getCityByList(city);
   }
 });

@@ -1,7 +1,3 @@
-import {
-  setToLocalStorage,
-  getFromLocalStorage,
-} from "./connectToLocalStorage.js";
 import { buildMarkUpCard } from "./buildMarkUpCard.js";
 import { getMap } from "./getMap.js";
 
@@ -10,9 +6,7 @@ export const contentCard = document.createElement("div");
 contentCard.classList.add("main__card-block");
 export const mainCard = document.querySelector(".main__card");
 
-// Пишем ассинхронную функцию для отправки и полчения данных по API
-
-export async function getCity(city) {
+export async function getCityByList(city) {
   mainCard.innerHTML = "";
   try {
     const response = await fetch(
@@ -21,13 +15,11 @@ export async function getCity(city) {
     const data = await response.json();
     contentCard.innerHTML = buildMarkUpCard(data);
     getMap(data.coord.lat, data.coord.lon);
-    await setToLocalStorage(`${data.name}`);
-    await getFromLocalStorage();
   } catch (error) {
     contentCard.innerHTML = `
-          Город '${city}' не найден.
-          Попробуйте ввести другое название
-      `;
+            Город '${city}' не найден.
+            Попробуйте ввести другое название
+        `;
   }
   mainCard.append(contentCard);
 }
