@@ -24,5 +24,6 @@ module.exports = {
       },
     ],
     "import/extensions": [0, { js: "always" }],
+    "no-unused-expressions": ["error", { allowShortCircuit: true }],
   },
 };

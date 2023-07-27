@@ -4,7 +4,7 @@ export const citiesList = document.querySelector(".main__cities-list");
 
 // Ниже пишем функцию по добавлению в Local Storage данных
 // Записываем значение в виде массива, куда передаем ранее введенные города
-// При этом сначала проверяем наличие ключа в localStorage и если есть присваеиваем его переменной databse
+// При этом сначала проверяем наличие ключа в localStorage и если есть присваиваем его переменной databse
 // чтобы после перезагрузки страницы переменная не обнулялась
 
 export async function setToLocalStorage(city) {
@@ -15,8 +15,8 @@ export async function setToLocalStorage(city) {
       dataBase = dataBaseJson;
     }
   }
-  if (dataBase.length <= 2) {
-    dataBase.push(city);
+  if (dataBase.length > 0 && dataBase.length <= 9) {
+    !dataBase.includes(city) && dataBase.push(city);
   } else {
     dataBase.shift();
     dataBase.push(city);

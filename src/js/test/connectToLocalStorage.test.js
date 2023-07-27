@@ -1,4 +1,8 @@
-import { connectToLocalStorage } from "../connectToLocalStorage.js";
+import {
+  connectToLocalStorage,
+  // createCitiesList,
+  // citiesList,
+} from "../connectToLocalStorage.js";
 
 describe("Check setToLocalStorage function: ", () => {
   test("Check is dataBase exist ", () => {
@@ -9,6 +13,12 @@ describe("Check setToLocalStorage function: ", () => {
       if (dataBaseJson.dataBase.length > 0) {
         expect(newDataBase).toEqual(dataBaseJson.dataBase);
       }
+    }
+  });
+  test("Check is dataBase doesn`t exist ", () => {
+    const dataBase = "";
+    if (!dataBase) {
+      expect(dataBase).toBeFalsy();
     }
   });
   test("Check for adding one more city", () => {
@@ -46,10 +56,14 @@ describe("Check connectToLocalStorage: ", () => {
   });
 });
 
-// describe('createCitiesList function: ', () => {
-//     test('fsgfg', () => {
-//         let citiesList = document.createElement('div');
-//         createCitiesList('Tokyo');
-//         expect(citiesList.innerHTML).toEqual('Tokyo');
-//     })
-// })
+// describe("createCitiesList function: ", () => {
+//   // let citiList = citiesList;
+//   window.document.body.append(citiesList)
+//   console.log("Document", citiesList);
+//   test("Recieve a cities list", () => {
+//     // citiesList
+//     console.log("Document", citiesList);
+//     // document.body.append(citiesList);
+//     // expect(createCitiesList(citiesList, ["Tokyo"])).toEqual("Tokyo");
+//   });
+// });
